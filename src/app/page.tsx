@@ -16,7 +16,7 @@ export default function Home() {
         <h2 className="font-semibold text-3xl text-center text-slate-700">
           <TypewriterTitle />
         </h2>
-        <div className="mt-4 flex justify-center">
+        <div className="mt-6 flex justify-center">
           <SignedOut>
             <SignInButton mode="modal">
               <Button className="bg-green-600 font-semibold">

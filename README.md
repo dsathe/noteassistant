@@ -10,3 +10,5 @@ A note taking website with AI features
     site hosted on http://localhost:3000
 4) Command to install shadcn
     npx shadcn@latest init
+5) Intall prisma
+    npm install prisma --save-dev

@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Ubuntu } from "next/font/google";
+import Providers from '../components/Providers';
 
 const font = Ubuntu({
   subsets: ["latin"],
@@ -23,9 +24,11 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${font.className} antialiased`}>
-          {children}
-        </body>
+        <Providers>
+          <body className={`${font.className} antialiased`}>
+            {children}
+          </body>
+        </Providers>
       </html>
     </ClerkProvider>
   );

@@ -8,6 +8,10 @@ import { Mutation, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
+/*
+    Description ->  React Component for creating dialog box to create new note.
+                    It sends a POST request to the database.
+*/
 
 type Props = {}
 

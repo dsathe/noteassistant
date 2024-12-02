@@ -1,4 +1,9 @@
 // /api/createNoteBook
+/*
+    Input -> POST request with name in the body
+    Output -> Send a prisma request to create new note entry in the database
+    Description -> Creating createNoteBook endpoint to create a note entry in the mongodb database
+*/
 
 import prisma from "@/lib/db/prisma";
 import { createNoteSchema } from "@/lib/validation/note";

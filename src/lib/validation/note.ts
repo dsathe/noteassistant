@@ -1,3 +1,7 @@
+/*
+    Description -> Creating validation function to make sure correct schema for the object.
+*/
+
 import { z } from 'zod';
 
 export const createNoteSchema = z.object({

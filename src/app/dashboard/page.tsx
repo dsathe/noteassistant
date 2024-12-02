@@ -8,6 +8,11 @@ import CreateNoteDialog from '@/components/CreateNoteDialog';
 
 type Props = {}
 
+/*
+    Description ->  Creating react component to showcase dashboard with multiple notes for the user.
+                    Added functionality to create new notes
+*/
+
 const DashboardPage = (props: Props) => {
     return (
         <>

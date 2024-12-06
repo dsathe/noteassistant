@@ -25,7 +25,9 @@ type Props = {
     editor: Editor;
 }
 
-
+/*
+    Description -> Creating the Menu Bar for the Editor
+*/
 const TipTapMenuBar = ({ editor }: Props) => {
     return (
         <div className='flex flex-wrap gap-2'>
@@ -131,9 +133,6 @@ const TipTapMenuBar = ({ editor }: Props) => {
             >
                 <Redo className="w-6 h-6" />
             </button>
-
-
-
         </div>
     )
 }

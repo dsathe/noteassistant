@@ -12,6 +12,9 @@ type Props = {
     params: { noteId: string; }
 }
 
+/*
+    Description -> Creating a page with editor to edit and view a note
+*/
 const NotebookPage = async ({ params }: Props) => {
     const { noteId } = await Promise.resolve(params);
     // Check if user is logged in
@@ -26,7 +29,7 @@ const NotebookPage = async ({ params }: Props) => {
         user_name = user.username || user.emailAddresses[0].emailAddress;
     }
 
-
+    // Check if note exists
     const notes = await prisma.note.findUnique({
         where: {
             id: noteId,
@@ -58,8 +61,7 @@ const NotebookPage = async ({ params }: Props) => {
                     {/* TODO: Delete button  */}
                 </div>
                 <div className="mt-8 border shadow-xl border-stone-200 rounded-lg px-8 py-8 w-full">
-                    {/* Editor */}
-                    <TipTapEditor />
+                    <TipTapEditor note={note} />
                 </div>
             </div>
         </div>

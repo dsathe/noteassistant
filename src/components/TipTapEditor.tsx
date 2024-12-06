@@ -1,38 +1,66 @@
 'use client'
-import React, { use, useEffect } from 'react';
-import { EditorContent, useEditor, BubbleMenu, FloatingMenu } from '@tiptap/react';
+import React, { useEffect } from 'react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
 import TipTapMenuBar from '@/components/TipTapMenuBar';
 import { Button } from './ui/button';
 import Underline from '@tiptap/extension-underline';
 import { useDebounce } from '@/lib/useDebounce';
-type Props = {}
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { LoaderPinwheel } from 'lucide-react';
+type Props = {
+    note: any;
+}
+/*
+    Description ->  React Component for creating a TipTap Editor.
+*/ 
+const TipTapEditor = ({ note }: Props) => {
+    const [content, setContent] = React.useState(note.content || 'Start typing...');
+    const saveNote = useMutation({
+        mutationFn: async () => {
+            const response = await axios.post('/api/saveNote', {
+                noteId: note.id,
+                content
+            });
+            return response.data;
+        },
+    });
 
-const TipTapEditor = (props: Props) => {
-    const [editorState, setEditorState] = React.useState('Start typing...');
     const editor = useEditor({
         autofocus: true,
         extensions: [StarterKit, Underline],
-        content: editorState,
+        content: content,
         onUpdate: ({ editor }) => {
-            setEditorState(editor.getHTML());
-        }
+            setContent(editor.getHTML());
+        },
+        immediatelyRender: false
     })
-    const debouncedEditorState = useDebounce(editorState, 1000);
+    const debouncedContent = useDebounce(content, 1000);
     useEffect(() => {
-        // TODO: save to db
-    }, [debouncedEditorState]);
+        if (debouncedContent === '') return
+        saveNote.mutate(undefined, {
+            onSuccess: data => {
+                console.log("Successfully saved note", data);
+            },
+            onError: error => {
+                console.log("Error saving note", error);
+            }
+        })
+    }, [debouncedContent]);
 
     return (
         <>
             <div className='flex flex-row justify-between'>
                 {editor && <TipTapMenuBar editor={editor} />}
-                <Button>Save</Button>
+                <Button disabled variant={'outline'}>
+                    {saveNote.isPending ? 'Saving Note' : 'Saved'}
+                    {saveNote.isPending && <span className="animate-spin ml-1" ><LoaderPinwheel className="h-4 w-4" /></span>}
+                </Button>
             </div>
             <div className='prose'>
                 <EditorContent editor={editor} />
-                {/* <FloatingMenu editor={editor}>This is the floating menu</FloatingMenu>
-            <BubbleMenu editor={editor}>This is the bubble menu</BubbleMenu> */}
+                {/* Optional: Add floating/bubble menu */}
             </div>
         </>
 

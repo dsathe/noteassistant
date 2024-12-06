@@ -17,9 +17,6 @@ export async function POST(req: Request) {
     }
     const body = await req.json();
     const { name } = body;
-    console.log("body is " + body);
-    console.log("name is " + name);
-    //console.log("userid is " + userId);
     const content = "";
     const title = name;
     const note = await prisma.note.create({

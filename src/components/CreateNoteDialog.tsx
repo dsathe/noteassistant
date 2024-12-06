@@ -37,10 +37,6 @@ const CreateNoteDialog = (props: Props) => {
         createNotebook.mutate(undefined, {
             onSuccess: ({ note }) => {
                 console.log("Successfully created a note");
-                console.log(note.id);
-                console.log(note.title);
-                console.log(note.content);
-                console.log(note.userId);
                 router.push(`/notebook/${note.id}`);
             },
             onError: (error) => {

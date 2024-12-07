@@ -64,16 +64,16 @@ const DashboardPage = async (props: Props) => {
                         {
                             notes.map(note => {
                                 return (
-                                    <a href={`/notes/{$note.id}`} key={note.id} className='border border-stone-900 w-600 p-2'>
+                                    <a href={`/notebook/${note.id}`} key={note.id} className='border border-stone-900 w-170 p-2 hover:shadow-xl transition hover:-translate-y-1'>
                                         <div className='p-1'>
                                             <h3 className='text-xl font-semibold text-gray-900'>{note.title}</h3>
+                                        </div>
+                                        <div className='flex flex-col p-1 w-150 text-wrap'>
+                                            <p className='text-gray-600 text-l'>{note.content?.replace(/(<([^>]+)>)/ig, '').slice(0, 70)}</p>
                                             <br />
-                                            <p className='text-sm text-gray-450'>
+                                            <p className='text-sm text-gray-350'>
                                                 {new Date(note.updatedAt).toLocaleDateString()}
                                             </p>
-                                        </div>
-                                        <div className='flex flex-col hover:shadow-xl transition hover:-translate-y-1 p-1'>
-                                            <p className='text-gray-600 text-l border'>{note.content?.slice(0, 70)}</p>
                                         </div>
                                     </a>
                                 )

@@ -69,7 +69,7 @@ const DashboardPage = async (props: Props) => {
                                             <h3 className='text-xl font-semibold text-gray-900'>{note.title}</h3>
                                         </div>
                                         <div className='flex flex-col p-1 w-150 text-wrap'>
-                                            <p className='text-gray-600 text-l'>{note.content?.replace(/(<([^>]+)>)/ig, '').slice(0, 70)}</p>
+                                            <p className='text-gray-600 text-l overflow-hidden'>{note.content?.replace(/(<([^>]+)>)/ig, '').slice(0, 70)}</p>
                                             <br />
                                             <p className='text-sm text-gray-350'>
                                                 {new Date(note.updatedAt).toLocaleDateString()}

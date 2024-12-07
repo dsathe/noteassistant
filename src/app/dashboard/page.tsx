@@ -27,8 +27,6 @@ const DashboardPage = async (props: Props) => {
             userId: userId,
         }
     });
-    console.log("Notes are " + notes.length);
-    console.log(notes);
 
     return (
         <>

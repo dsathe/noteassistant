@@ -9,6 +9,7 @@ import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/db/prisma';
 import { NextResponse } from "next/server";
 import { Note } from '@prisma/client';
+import NoteCard from '@/components/NoteCard';
 
 type Props = {}
 
@@ -57,23 +58,16 @@ const DashboardPage = async (props: Props) => {
                     )}
 
                     {/* display all notes */}
-                    <div className='grid sm:grid-cols-3 md:grid-cols-5 grid-cols-1 gap-3'>
-                        <CreateNoteDialog />
+
+                    <CreateNoteDialog />
+                    <br />
+                    <div className='h-1 p-4'>
+                    </div>
+                    <div className='columns-1 sm:columns-3 md:columns-5 col-gap-3 row-gap-3'>
                         {
                             notes.map(note => {
                                 return (
-                                    <a href={`/notebook/${note.id}`} key={note.id} className='border border-stone-900 w-170 p-2 hover:shadow-xl transition hover:-translate-y-1'>
-                                        <div className='p-1'>
-                                            <h3 className='text-xl font-semibold text-gray-900'>{note.title}</h3>
-                                        </div>
-                                        <div className='flex flex-col p-1 w-150 text-wrap'>
-                                            <p className='text-gray-600 text-l overflow-hidden'>{note.content?.replace(/(<([^>]+)>)/ig, '').slice(0, 70)}</p>
-                                            <br />
-                                            <p className='text-sm text-gray-350'>
-                                                {new Date(note.updatedAt).toLocaleDateString()}
-                                            </p>
-                                        </div>
-                                    </a>
+                                    <NoteCard note={note} key={note.id} />
                                 )
                             })
                         }

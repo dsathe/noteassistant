@@ -14,7 +14,7 @@ A note taking website with AI features
 
 5) Command to initialize prisma client
     Do it after each change in the schema
-    npm prisma generate
+    npx prisma generate
 
 6) Commands to run 
     npm run dev

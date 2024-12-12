@@ -16,14 +16,17 @@ export async function POST(req: Request) {
         return new NextResponse('unauthorised', { status: 401 });
     }
     const body = await req.json();
-    const { name } = body;
+    const name = body['name'];
+    const notecolor = body['notecolor'];
     const content = "";
     const title = name;
+
     const note = await prisma.note.create({
         data: {
             title,
             content,
             userId,
+            notecolor
         },
     })
     return NextResponse.json({ note }, { status: 201 });

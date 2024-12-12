@@ -18,11 +18,14 @@ type Props = {}
 const CreateNoteDialog = (props: Props) => {
 
     const [input, setInput] = React.useState('');
+    const [selectedcolorcode, setColorcode] = React.useState('bg-emerald-200');
+    const colorpallette = ["bg-emerald-200", "bg-amber-300", "bg-violet-300", "bg-rose-400", "bg-orange-300"]
     const router = useRouter();
     const createNotebook = useMutation({
         mutationFn: async () => {
             const response = await axios.post('/api/createNoteBook', {
-                name: input
+                name: input,
+                notecolor: selectedcolorcode
             });
             return response.data;
         }
@@ -63,6 +66,23 @@ const CreateNoteDialog = (props: Props) => {
                 <form onSubmit={handleSubmit}>
                     <Input value={input} onChange={(e) => setInput(e.target.value)} placeholder='Name ...' />
                     <div className='h-4'></div>
+                    <h4 className='font-semibold text-grey-600 mb-1'>Color</h4>
+                    {colorpallette.map((color) => (
+                        <label key={color.split('-')[1]} className="inline-flex mr-2">
+                            <input
+                                type="radio"
+                                name="color"
+                                value={color}
+                                checked={selectedcolorcode === color}
+                                onChange={(e) => setColorcode(e.target.value)}
+                                className='mr-2'
+                            />
+                            <p className={`w-8 h-8 ${color} rounded-full inline flex justify-center items-center mr-5`}>
+                            </p>
+                        </label>
+                    ))}
+                    <br />
+                    <br />
                     <div className='flex items-center gap-2'>
                         <Button type='reset' variant={'secondary'}>Cancel</Button>
                         <Button type="submit" className='bg-green-600' disabled={createNotebook.isPending}>
@@ -70,7 +90,6 @@ const CreateNoteDialog = (props: Props) => {
                                 <Loader2 className='w-4 h-4 mr-2 animate spin' />
                             )}
                             Submit</Button>
-
                     </div>
                 </form>
             </DialogContent>

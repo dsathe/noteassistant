@@ -20,6 +20,7 @@ model Note {
   title     String
   content   String?
   userId    String
+  notecolor String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

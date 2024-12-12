@@ -6,10 +6,13 @@ import { UserButton } from '@clerk/nextjs';
 import { Separator } from '@/components/ui/separator';
 import CreateNoteDialog from '@/components/CreateNoteDialog';
 import { auth } from '@clerk/nextjs/server';
-import { NextResponse } from "next/server";
+
+
 import { Note } from '@prisma/client';
 import NoteCard from '@/components/NoteCard';
 import { getAllNotesOfUser } from '@/lib/services/note-service';
+import { redirect } from 'next/navigation';
+
 type Props = {}
 
 /*
@@ -20,7 +23,8 @@ const DashboardPage = async (props: Props) => {
     const { userId } = await auth();
     /* Get notes from db using the userId*/
     if (!userId) {
-        return new NextResponse('unauthorised', { status: 401 });
+        console.error("Unauthorized access attempt");
+        redirect('/');
     }
     const notes: Note[] = await getAllNotesOfUser(userId);
 

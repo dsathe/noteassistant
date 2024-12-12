@@ -16,9 +16,11 @@ export async function POST(req: Request) {
         return new NextResponse('unauthorised', { status: 401 });
     }
     const body = await req.json();
-    const { name, coverImageUrl } = body;
+    const name = body['name'];
+    const notecolor = body['notecolor'];
+    const coverImageUrl = body['coverImageUrl'];
     const content = "";
     const title = name;
-    const note = await createNote(userId, title, content, coverImageUrl);
+    const note = await createNote(userId, title, content, notecolor, coverImageUrl);
     return NextResponse.json({ note }, { status: 201 });
 }

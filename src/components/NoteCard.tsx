@@ -1,7 +1,5 @@
 import { Note } from '@prisma/client'
-import { Separator } from '@/components/ui/separator';
-import React from 'react'
-import { NodeNextRequest } from 'next/dist/server/base-http/node';
+import React from 'react';
 
 type Props = {
     note: Note
@@ -14,13 +12,9 @@ const NoteCard = (props: Props) => {
     if (props.note.content != undefined) {
         len = props.note.content.replace(/(<([^>]+)>)/ig, '').length;
     }
-    randomNumber = Math.min(randomNumber, len);
-
-    const colorpallette = ["bg-emerald-200", "bg-amber-300", "bg-violet-300", "bg-rose-400", "bg-orange-300"]
-    const notecolor = colorpallette[Math.floor(Math.random() * colorpallette.length)];
 
     return (
-        <div className={`rounded overflow-hidden break-inside-avoid shadow-lg w-170 hover:shadow-xl transition hover:-translate-y-1 p-4 mb-4 ${notecolor}`}>
+        <div className={`rounded overflow-hidden break-inside-avoid shadow-lg w-170 hover:shadow-xl transition hover:-translate-y-1 p-4 mb-4 ${props.note.notecolor}`}>
             <a href={`/notebook/${props.note.id}`} key={props.note.id} className='w-160'>
                 <div className='p-1'>
                     <h3 className='text-xl font-bold text-gray-750 mb-2'>{props.note.title}</h3>

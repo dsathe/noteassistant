@@ -28,7 +28,7 @@ const CreateNoteDialog = (props: Props) => {
         mutationFn: async () => {
             const response = await axios.post('/api/createNoteBook', {
                 name: input,
-                coverImageUrl: coverImage
+                coverImageUrl: coverImage,
                 notecolor: selectedcolorcode
             });
             return response.data;

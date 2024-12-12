@@ -46,12 +46,13 @@ export async function getNodeByNoteId(noteId: string) {
     Input -> userId, title, content, cover image url
     Output -> None
 */
-export async function createNote(userId: string, title: string, content: string, coverImageUrl: string) {
+export async function createNote(userId: string, title: string, content: string, notecolor: string, coverImageUrl: string) {
     return await prisma.note.create({
         data: {
             title: title,
             content: content,
             userId: userId,
+            notecolor: notecolor,
             coverImageUrl: coverImageUrl
         }
     })

@@ -21,9 +21,9 @@ model Note {
   content   String?
   userId    String
   notecolor String
+  coverImageUrl String @default("https://dummyimage.com/1200x400/ffffff/fff.png")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  coverImageUrl String @default("https://dummyimage.com/1200x400/ffffff/fff.png")
   
   @@map("notes")
 }

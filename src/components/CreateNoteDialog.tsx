@@ -7,6 +7,7 @@ import { Button } from './ui/button';
 import { Mutation, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useToast } from "@/hooks/use-toast";
 
 /*
     Description ->  React Component for creating dialog box to create new note.
@@ -20,6 +21,7 @@ const CreateNoteDialog = (props: Props) => {
     const [input, setInput] = React.useState('');
     const [selectedcolorcode, setColorcode] = React.useState('bg-emerald-200');
     const colorpallette = ["bg-emerald-200", "bg-amber-300", "bg-violet-300", "bg-rose-400", "bg-orange-300"]
+    const { toast } = useToast();
     const router = useRouter();
     const createNotebook = useMutation({
         mutationFn: async () => {
@@ -41,9 +43,18 @@ const CreateNoteDialog = (props: Props) => {
             onSuccess: ({ note }) => {
                 console.log("Successfully created a note");
                 router.push(`/notebook/${note.id}`);
+                toast({
+                    variant: "success",
+                    description: "Successfully created a note.",
+                });
             },
             onError: (error) => {
                 console.error(error);
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "Failed to create a note. Please try again later.",
+                });
             }
         })
     };

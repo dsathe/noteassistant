@@ -79,18 +79,26 @@ const CreateNoteDialog = (props: Props) => {
                     <div className='h-4'></div>
                     <h4 className='font-semibold text-grey-600 mb-1'>Color</h4>
                     {colorpallette.map((color) => (
-                        <label key={color.split('-')[1]} className="inline-flex mr-2">
-                            <input
-                                type="radio"
-                                name="color"
-                                value={color}
-                                checked={selectedcolorcode === color}
-                                onChange={(e) => setColorcode(e.target.value)}
-                                className='mr-2'
-                            />
-                            <p className={`w-8 h-8 ${color} rounded-full inline flex justify-center items-center mr-5`}>
-                            </p>
-                        </label>
+                        // <label key={color.split('-')[1]} className="inline-flex mr-2">
+                        //     <input
+                        //         type="radio"
+                        //         name="color"
+                        //         value={color}
+                        //         checked={selectedcolorcode === color}
+                        //         onChange={(e) => setColorcode(e.target.value)}
+                        //         className='mr-2'
+                        //     />
+                        //     <p className={`w-8 h-8 ${color} rounded-full inline flex justify-center items-center mr-5`}>
+                        //     </p>
+                        // </label>
+                        <button
+                            key={color.split('-')[1]}
+                            type="button"
+                            onClick={() => setColorcode(color)}
+                            className={`w-8 h-8 ${color} rounded-full inline-flex justify-center items-center mr-5 border-2 ${selectedcolorcode === color ? 'border-black' : 'border-transparent'
+                                }`}
+                        >
+                        </button>
                     ))}
                     <br />
                     <br />

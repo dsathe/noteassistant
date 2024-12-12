@@ -1,16 +1,15 @@
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, User } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from "next/link";
 import React from 'react';
 import { UserButton } from '@clerk/nextjs';
 import { Separator } from '@/components/ui/separator';
 import CreateNoteDialog from '@/components/CreateNoteDialog';
 import { auth } from '@clerk/nextjs/server';
-import prisma from '@/lib/db/prisma';
 import { NextResponse } from "next/server";
 import { Note } from '@prisma/client';
 import NoteCard from '@/components/NoteCard';
-
+import { getAllNotesOfUser } from '@/lib/services/note-service';
 type Props = {}
 
 /*
@@ -23,11 +22,7 @@ const DashboardPage = async (props: Props) => {
     if (!userId) {
         return new NextResponse('unauthorised', { status: 401 });
     }
-    const notes: Note[] = await prisma.note.findMany({
-        where: {
-            userId: userId,
-        }
-    });
+    const notes: Note[] = await getAllNotesOfUser(userId);
 
     return (
         <>

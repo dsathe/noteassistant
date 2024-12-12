@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db/prisma";
+import { getNodeByNoteId, updateContent } from "@/lib/services/note-service";
 
 /*
     Input -> POST request with noteId and content in the body
@@ -14,16 +15,11 @@ export async function POST(req: Request) {
             return new NextResponse('Missing content or noteId', { status: 401 });
         }
 
-        const notes = await prisma.note.findMany({
-            where: {
-                id: noteId,
-            },
-        });
+        const notes = await getNodeByNoteId(noteId);
 
         if (!notes) {
             return new NextResponse('Note not found', { status: 401 });
         }
-
         if (notes.length != 1) {
             return new NextResponse('Failed to update note', { status: 401 });
         }
@@ -31,14 +27,7 @@ export async function POST(req: Request) {
         const note = notes[0];
 
         if (note.content !== content) {
-            await prisma.note.update({
-                where: {
-                    id: noteId,
-                },
-                data: {
-                    content: content
-                }
-            });
+            await updateContent(noteId, content);
         }
         return NextResponse.json({
             success: true

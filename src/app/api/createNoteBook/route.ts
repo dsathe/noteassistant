@@ -5,10 +5,10 @@
     Description -> Creating createNoteBook endpoint to create a note entry in the mongodb database
 */
 
-import prisma from "@/lib/db/prisma";
 import { createNoteSchema } from "@/lib/validation/note";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { createNote } from "@/lib/services/note-service";
 
 export async function POST(req: Request) {
     const { userId } = await auth();
@@ -16,15 +16,9 @@ export async function POST(req: Request) {
         return new NextResponse('unauthorised', { status: 401 });
     }
     const body = await req.json();
-    const { name } = body;
+    const { name, coverImageUrl } = body;
     const content = "";
     const title = name;
-    const note = await prisma.note.create({
-        data: {
-            title,
-            content,
-            userId,
-        },
-    })
+    const note = await createNote(userId, title, content, coverImageUrl);
     return NextResponse.json({ note }, { status: 201 });
 }

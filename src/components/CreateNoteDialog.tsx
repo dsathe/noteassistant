@@ -8,7 +8,7 @@ import { Mutation, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
-
+import { COVER_IMAGE_PRESETS } from '@/components/CoverImageModal';
 /*
     Description ->  React Component for creating dialog box to create new note.
                     It sends a POST request to the database.
@@ -19,12 +19,14 @@ type Props = {}
 const CreateNoteDialog = (props: Props) => {
 
     const [input, setInput] = React.useState('');
+    const [coverImage, setCoverImage] = React.useState('');
     const { toast } = useToast();
     const router = useRouter();
     const createNotebook = useMutation({
         mutationFn: async () => {
             const response = await axios.post('/api/createNoteBook', {
-                name: input
+                name: input,
+                coverImageUrl: coverImage
             });
             return response.data;
         }
@@ -56,10 +58,17 @@ const CreateNoteDialog = (props: Props) => {
         })
     };
 
+    const handleRandomImageSelection = () => {
+        const randomPreset = COVER_IMAGE_PRESETS[Math.floor(Math.random() * COVER_IMAGE_PRESETS.length)];
+        setCoverImage(randomPreset);
+    }
+
     return (
         <Dialog>
             <DialogTrigger>
-                <div className='border-dashed border-2 border-green-600 h-full rounded-lg items-center justify-center sm:flex-cl hover:shadow-xl transition hover:-translate-y-1 flex-row p-4'>
+                <div className='border-dashed border-2 border-green-600 h-full rounded-lg items-center justify-center sm:flex-cl hover:shadow-xl transition hover:-translate-y-1 flex-row p-4'
+                 onClick={handleRandomImageSelection}
+                >
                     <Plus className="w-6 h-6 text-green-600" strokeWidth={3} />
                     <h2 className='font-semibold text-green-600 sm:mt-2'>New Note</h2>
                 </div>

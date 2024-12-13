@@ -6,9 +6,11 @@ import { UserButton } from '@clerk/nextjs';
 import { Separator } from '@/components/ui/separator';
 import CreateNoteDialog from '@/components/CreateNoteDialog';
 import { auth } from '@clerk/nextjs/server';
-import prisma from '@/lib/db/prisma';
+
+
 import { Note } from '@prisma/client';
 import NoteCard from '@/components/NoteCard';
+import { getAllNotesOfUser } from '@/lib/services/note-service';
 import { redirect } from 'next/navigation';
 
 type Props = {}
@@ -24,11 +26,7 @@ const DashboardPage = async (props: Props) => {
         console.error("Unauthorized access attempt");
         redirect('/');
     }
-    const notes: Note[] = await prisma.note.findMany({
-        where: {
-            userId: userId,
-        }
-    });
+    const notes: Note[] = await getAllNotesOfUser(userId);
 
     return (
         <>

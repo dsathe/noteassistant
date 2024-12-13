@@ -8,7 +8,7 @@ import { Mutation, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
-
+import { COVER_IMAGE_PRESETS } from '@/components/CoverImageModal';
 /*
     Description ->  React Component for creating dialog box to create new note.
                     It sends a POST request to the database.
@@ -19,6 +19,7 @@ type Props = {}
 const CreateNoteDialog = (props: Props) => {
 
     const [input, setInput] = React.useState('');
+    const [coverImage, setCoverImage] = React.useState('');
     const [selectedcolorcode, setColorcode] = React.useState('bg-emerald-200');
     const colorpallette = ["bg-emerald-200", "bg-amber-300", "bg-violet-300", "bg-rose-400", "bg-orange-300"]
     const { toast } = useToast();
@@ -27,6 +28,7 @@ const CreateNoteDialog = (props: Props) => {
         mutationFn: async () => {
             const response = await axios.post('/api/createNoteBook', {
                 name: input,
+                coverImageUrl: coverImage,
                 notecolor: selectedcolorcode
             });
             return response.data;
@@ -59,10 +61,17 @@ const CreateNoteDialog = (props: Props) => {
         })
     };
 
+    const handleRandomImageSelection = () => {
+        const randomPreset = COVER_IMAGE_PRESETS[Math.floor(Math.random() * COVER_IMAGE_PRESETS.length)];
+        setCoverImage(randomPreset);
+    }
+
     return (
         <Dialog>
             <DialogTrigger>
-                <div className='border-dashed border-2 border-green-600 h-full rounded-lg items-center justify-center sm:flex-cl hover:shadow-xl transition hover:-translate-y-1 flex-row p-4'>
+                <div className='border-dashed border-2 border-green-600 h-full rounded-lg items-center justify-center sm:flex-cl hover:shadow-xl transition hover:-translate-y-1 flex-row p-4'
+                 onClick={handleRandomImageSelection}
+                >
                     <Plus className="w-6 h-6 text-green-600" strokeWidth={3} />
                     <h2 className='font-semibold text-green-600 sm:mt-2'>New Note</h2>
                 </div>
@@ -79,18 +88,6 @@ const CreateNoteDialog = (props: Props) => {
                     <div className='h-4'></div>
                     <h4 className='font-semibold text-grey-600 mb-1'>Color</h4>
                     {colorpallette.map((color) => (
-                        // <label key={color.split('-')[1]} className="inline-flex mr-2">
-                        //     <input
-                        //         type="radio"
-                        //         name="color"
-                        //         value={color}
-                        //         checked={selectedcolorcode === color}
-                        //         onChange={(e) => setColorcode(e.target.value)}
-                        //         className='mr-2'
-                        //     />
-                        //     <p className={`w-8 h-8 ${color} rounded-full inline flex justify-center items-center mr-5`}>
-                        //     </p>
-                        // </label>
                         <button
                             key={color.split('-')[1]}
                             type="button"

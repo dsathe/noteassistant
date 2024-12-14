@@ -9,12 +9,18 @@ import { useDebounce } from '@/lib/useDebounce';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { LoaderPinwheel } from 'lucide-react';
+import { common, createLowlight } from 'lowlight';
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import 'highlight.js/styles/atom-one-dark.css';
+
 type Props = {
     note: any;
 }
 /*
     Description ->  React Component for creating a TipTap Editor.
-*/ 
+*/
+const lowlight = createLowlight(common);
+
 const TipTapEditor = ({ note }: Props) => {
     const [content, setContent] = React.useState(note.content || 'Start typing...');
     const saveNote = useMutation({
@@ -29,7 +35,8 @@ const TipTapEditor = ({ note }: Props) => {
 
     const editor = useEditor({
         autofocus: true,
-        extensions: [StarterKit, Underline],
+        extensions: [StarterKit, Underline,
+            CodeBlockLowlight.configure({ lowlight })],
         content: content,
         onUpdate: ({ editor }) => {
             setContent(editor.getHTML());

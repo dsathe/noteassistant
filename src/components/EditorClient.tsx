@@ -7,6 +7,7 @@ import TipTapEditor from '@/components/TipTapEditor';
 import CoverImageModal from '@/components/CoverImageModal';
 import { useToast } from "@/hooks/use-toast";
 import Link from 'next/link';
+import DeleteButton from '@/components/DeleteButton';
 type Props = {
     note: any;
     userName: string;
@@ -84,6 +85,9 @@ const EditorClient = ({ note, userName }: Props) => {
                             <span className='font-semibold'>{userName}</span>
                             <span className='inline-block mx-1'>/</span>
                             <span className='text-stone-500 font-semibold'>{note.title}</span>
+                        </div>
+                        <div className='ml-auto'>
+                            <DeleteButton noteId={note.id} />
                         </div>
                     </div>
                     <div className="mt-8 border shadow-xl bg-stone-50 border-stone-200 rounded-lg px-8 py-8 w-full">

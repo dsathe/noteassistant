@@ -31,7 +31,7 @@ export async function getAllNotesOfUser(userId: string) {
     Description -> Get note by noteId
     Input -> noteId
     Output -> note
-*/  
+*/
 export async function getNodeByNoteId(noteId: string) {
     return await prisma.note.findMany({
         where: {
@@ -86,6 +86,19 @@ export async function updateContent(noteId: string, content: string) {
         },
         data: {
             content: content
+        }
+    })
+}
+
+/*
+    Description -> Deleting a note
+    Input -> noteId
+    Output -> None
+*/
+export async function deleteNote(noteId: string) {
+    return await prisma.note.delete({
+        where: {
+            id: noteId
         }
     })
 }

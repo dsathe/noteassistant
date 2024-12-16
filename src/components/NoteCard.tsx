@@ -1,5 +1,6 @@
 import { Note } from '@prisma/client'
 import React from 'react';
+import DeleteButton from '@/components/DeleteButton';
 
 type Props = {
     note: Note
@@ -23,15 +24,18 @@ const NoteCard = (props: Props) => {
                 <div className='p-1 w-150'>
                     <p className='text-gray-800 text-base overflow-hidden'>{props.note.content?.replace(/(<([^>]+)>)/ig, '').slice(0, randomNumber)}</p>
                     <br />
-                    <p className='text-sm text-gray-350'>
-                        {new Date(props.note.updatedAt).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: '2-digit',
-                            year: 'numeric',
-                        })}
-                    </p>
                 </div>
             </a>
+            <div className='flex flex-row justify-between items-end'>
+                <p className='text-sm text-gray-350'>
+                    {new Date(props.note.updatedAt).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: '2-digit',
+                        year: 'numeric',
+                    })}
+                </p>
+                <DeleteButton noteId={props.note.id} />
+            </div>
         </div>
     )
 }

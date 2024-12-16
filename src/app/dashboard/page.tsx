@@ -49,16 +49,15 @@ const DashboardPage = async (props: Props) => {
                     <div className="mt-8 mb-8">
                         <Separator />
                     </div>
-                    {/* TODO: Loop to render notes */}
+                    <CreateNoteDialog />
+                    
                     {notes.length === 0 && (
                         <div className="text-center">
-                            <h2 className='text-xl text-gray-500'>No notes yet.</h2>
+                            <h2 className='text-xl text-gray-500 mt-5'>No notes yet.</h2>
                         </div>
                     )}
 
                     {/* display all notes */}
-
-                    <CreateNoteDialog />
                     <br />
                     <div className='h-1 p-4'>
                     </div>

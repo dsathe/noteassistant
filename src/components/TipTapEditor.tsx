@@ -12,6 +12,10 @@ import { LoaderPinwheel } from 'lucide-react';
 import { common, createLowlight } from 'lowlight';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import 'highlight.js/styles/atom-one-dark.css';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
 
 type Props = {
     note: any;
@@ -19,6 +23,7 @@ type Props = {
 /*
     Description ->  React Component for creating a TipTap Editor.
 */
+// creating lowlight obj for highlighting common languages
 const lowlight = createLowlight(common);
 
 const TipTapEditor = ({ note }: Props) => {
@@ -35,8 +40,17 @@ const TipTapEditor = ({ note }: Props) => {
 
     const editor = useEditor({
         autofocus: true,
-        extensions: [StarterKit, Underline,
-            CodeBlockLowlight.configure({ lowlight })],
+        extensions: [
+            StarterKit,
+            Underline,
+            CodeBlockLowlight.configure({ lowlight }),
+            Table.configure({
+                resizable: true,
+            }),
+            TableRow,
+            TableHeader,
+            TableCell,
+        ],
         content: content,
         onUpdate: ({ editor }) => {
             setContent(editor.getHTML());

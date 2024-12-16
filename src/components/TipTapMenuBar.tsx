@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 import { Editor } from '@tiptap/react';
 import {
@@ -18,7 +19,16 @@ import {
     Redo,
     Undo,
     Codepen,
+    Table,
+    TableCellsSplit,
+    TableCellsMerge,
+    PanelRightClose,
+    PanelLeftClose,
+    PanelTopClose
 } from 'lucide-react';
+import { useState } from 'react';
+import Image from 'next/image';
+
 // import { Button } from './ui/button';
 
 type Props = {
@@ -30,109 +40,126 @@ type Props = {
 */
 const TipTapMenuBar = ({ editor }: Props) => {
     return (
-        <div className='flex flex-wrap gap-2'>
-            <button onClick={() => editor.chain().focus().toggleBold().run()}
-                disabled={!editor.can().chain().focus().toggleBold().run()}
-                className={editor.isActive('bold') ? 'is-active' : ''}
-            >
-                <Bold className='h-6 w-6' />
-            </button>
-            <button onClick={() => editor.chain().focus().toggleItalic().run()}
-                disabled={!editor.can().chain().focus().toggleItalic().run()}
-                className={editor.isActive('italic') ? 'is-active' : ''}
-            >
-                <Italic className='h-6 w-6' />
-            </button>
-            <button onClick={() => editor.chain().focus().toggleUnderline().run()}
-                disabled={!editor.can().chain().focus().toggleUnderline().run()}
-                className={editor.isActive('underline') ? 'is-active' : ''}
-            >
-                <Underline className='h-6 w-6' />
-            </button>
-            <button onClick={() => editor.chain().focus().toggleStrike().run()}
-                disabled={!editor.can().chain().focus().toggleStrike().run()}
-                className={editor.isActive('strike') ? 'is-active' : ''}
-            >
-                <Strikethrough className='h-6 w-6' />
-            </button>
-            <button onClick={() => editor.chain().focus().toggleCode().run()}
-                disabled={!editor.can().chain().focus().toggleCode().run()}
-                className={editor.isActive('code') ? 'is-active' : ''}
-            >
-                <Code className='h-6 w-6' />
-            </button>
-            <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                disabled={!editor.can().chain().focus().toggleHeading({ level: 1 }).run()}
-                className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
-            >
-                <Heading1 className='h-6 w-6' />
-            </button>
-            <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                disabled={!editor.can().chain().focus().toggleHeading({ level: 2 }).run()}
-                className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-            >
-                <Heading2 className='h-6 w-6' />
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                className={editor.isActive("heading", { level: 3 }) ? "is-active" : ""}
-            >
-                <Heading3 className="w-6 h-6" />
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-                className={editor.isActive("heading", { level: 4 }) ? "is-active" : ""}
-            >
-                <Heading4 className="w-6 h-6" />
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-                className={editor.isActive("heading", { level: 5 }) ? "is-active" : ""}
-            >
-                <Heading5 className="w-6 h-6" />
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-                className={editor.isActive("heading", { level: 6 }) ? "is-active" : ""}
-            >
-                <Heading6 className="w-6 h-6" />
-            </button>
-            <button onClick={() => editor.chain().focus().toggleBulletList().run()}
-                disabled={!editor.can().chain().focus().toggleBulletList().run()}
-                className={editor.isActive('bulletList') ? 'is-active' : ''}
-            >
-                <List className='h-6 w-6' />
-            </button>
-            <button onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                disabled={!editor.can().chain().focus().toggleOrderedList().run()}
-                className={editor.isActive('orderedList') ? 'is-active' : ''}
-            >
-                <ListOrdered className='h-6 w-6' />
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-                className={editor.isActive("codeBlock") ? "is-active" : ""}
-            >
-                <Codepen className="w-6 h-6" />
-            </button>
-            <button
-                onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                className={editor.isActive("blockquote") ? "is-active" : ""}
-            >
-                <Quote className="w-6 h-6" />
-            </button>
-            <button
-                onClick={() => editor.chain().focus().undo().run()}
-                disabled={!editor.can().chain().focus().undo().run()}
-            >
-                <Undo className="w-6 h-6" />
-            </button>
-            <button
-                onClick={() => editor.chain().focus().redo().run()}
-                disabled={!editor.can().chain().focus().redo().run()}
-            >
-                <Redo className="w-6 h-6" />
-            </button>
+        <div>
+            <div className='flex flex-wrap gap-2'>
+                <button onClick={() => editor.chain().focus().toggleBold().run()}
+                    disabled={!editor.can().chain().focus().toggleBold().run()}
+                    className={editor.isActive('bold') ? 'is-active' : ''}
+                >
+                    <Bold className='h-6 w-6' />
+                </button>
+                <button onClick={() => editor.chain().focus().toggleItalic().run()}
+                    disabled={!editor.can().chain().focus().toggleItalic().run()}
+                    className={editor.isActive('italic') ? 'is-active' : ''}
+                >
+                    <Italic className='h-6 w-6' />
+                </button>
+                <button onClick={() => editor.chain().focus().toggleUnderline().run()}
+                    disabled={!editor.can().chain().focus().toggleUnderline().run()}
+                    className={editor.isActive('underline') ? 'is-active' : ''}
+                >
+                    <Underline className='h-6 w-6' />
+                </button>
+                <button onClick={() => editor.chain().focus().toggleStrike().run()}
+                    disabled={!editor.can().chain().focus().toggleStrike().run()}
+                    className={editor.isActive('strike') ? 'is-active' : ''}
+                >
+                    <Strikethrough className='h-6 w-6' />
+                </button>
+                <button onClick={() => editor.chain().focus().toggleCode().run()}
+                    disabled={!editor.can().chain().focus().toggleCode().run()}
+                    className={editor.isActive('code') ? 'is-active' : ''}
+                >
+                    <Code className='h-6 w-6' />
+                </button>
+                <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                    disabled={!editor.can().chain().focus().toggleHeading({ level: 1 }).run()}
+                    className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                >
+                    <Heading1 className='h-6 w-6' />
+                </button>
+                <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                    disabled={!editor.can().chain().focus().toggleHeading({ level: 2 }).run()}
+                    className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                >
+                    <Heading2 className='h-6 w-6' />
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                    className={editor.isActive("heading", { level: 3 }) ? "is-active" : ""}
+                >
+                    <Heading3 className="w-6 h-6" />
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+                    className={editor.isActive("heading", { level: 4 }) ? "is-active" : ""}
+                >
+                    <Heading4 className="w-6 h-6" />
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
+                    className={editor.isActive("heading", { level: 5 }) ? "is-active" : ""}
+                >
+                    <Heading5 className="w-6 h-6" />
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
+                    className={editor.isActive("heading", { level: 6 }) ? "is-active" : ""}
+                >
+                    <Heading6 className="w-6 h-6" />
+                </button>
+                <button onClick={() => editor.chain().focus().toggleBulletList().run()}
+                    disabled={!editor.can().chain().focus().toggleBulletList().run()}
+                    className={editor.isActive('bulletList') ? 'is-active' : ''}
+                >
+                    <List className='h-6 w-6' />
+                </button>
+                <button onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                    disabled={!editor.can().chain().focus().toggleOrderedList().run()}
+                    className={editor.isActive('orderedList') ? 'is-active' : ''}
+                >
+                    <ListOrdered className='h-6 w-6' />
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+                    className={editor.isActive("codeBlock") ? "is-active" : ""}
+                >
+                    <Codepen className="w-6 h-6" />
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                    className={editor.isActive("blockquote") ? "is-active" : ""}
+                >
+                    <Quote className="w-6 h-6" />
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().undo().run()}
+                    disabled={!editor.can().chain().focus().undo().run()}
+                >
+                    <Undo className="w-6 h-6" />
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().redo().run()}
+                    disabled={!editor.can().chain().focus().redo().run()}
+                >
+                    <Redo className="w-6 h-6" />
+                </button>
+            </div>
+            <div className='flex flex-wrap gap-2'>
+                <button
+                    onClick={() => editor.chain().focus().insertTable({ rows: 2, cols: 2, withHeaderRow: true }).run()
+                    }
+                >
+                    <Table className=' h-6 w-6' />
+                </button>
+                <button onClick={() => editor.chain().focus().addColumnAfter().run()}><Image src='/icons/add-column-svg.svg' className='h-6 w-6' alt='del' width={15} height={15} /></button>
+                <button onClick={() => editor.chain().focus().deleteColumn().run()}><Image src='/icons/delete-column-svg.svg' className='h-6 w-6' alt='del' width={20} height={20} /></button>
+                <button onClick={() => editor.chain().focus().addRowBefore().run()}><Image src='/icons/add-row-svg.svg' className='h-6 w-6' width={20} height={20} alt='del' /></button>
+                <button onClick={() => editor.chain().focus().deleteRow().run()}><Image src='/icons/delete-row-svg.svg' className='h-6 w-6' width={20} height={20} alt='del' /></button>
+                <button onClick={() => editor.chain().focus().mergeCells().run()}><TableCellsMerge className='w-6 h-6' /></button>
+                <button onClick={() => editor.chain().focus().splitCell().run()}><TableCellsSplit className='h-6 w-6' /></button>
+                <button onClick={() => editor.chain().focus().deleteTable().run()}><Image src='/icons/table-delete-svg.svg' className='h-6 w-6' width={20} height={20} alt='del' /></button>
+            </div>
         </div>
     )
 }

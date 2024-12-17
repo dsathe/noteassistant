@@ -10,6 +10,8 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { createNote } from "@/lib/services/note-service";
 
+export const runtime = "edge";
+
 export async function POST(req: Request) {
     const { userId } = await auth();
     if (!userId) {

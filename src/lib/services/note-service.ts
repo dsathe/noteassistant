@@ -102,3 +102,18 @@ export async function deleteNote(noteId: string) {
         }
     })
 }
+
+/*
+    Description -> Get notes by specific noteIds
+    Input -> noteIds
+    Output -> array of notes
+*/
+export async function getNotesByIds(noteIds: string[]) {
+    return await prisma.note.findMany({
+        where: {
+            id: {
+                in: noteIds
+            }
+        }
+    })
+}

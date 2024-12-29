@@ -34,7 +34,8 @@ export async function POST(req: Request) {
         const note = notes[0];
 
         if (note.content !== content) {
-            const embedding = await generateEmbedding(note.title + " " + content);
+            const contentWithoutTags = content.replace(/<[^>]*>/g, '');
+            const embedding = await generateEmbedding(note.title + " " + contentWithoutTags);
             const result = await prisma.$transaction(async (tx) => {
                 const note = await tx.note.update({
                     where: {

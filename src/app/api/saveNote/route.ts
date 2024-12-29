@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { getNodeByNoteId, updateContent } from "@/lib/services/note-service";
+import { getNodeByNoteId } from "@/lib/services/note-service";
+import { generateEmbedding } from "@/lib/huggingface";
+import { notesIndex } from "@/lib/db/pinecone";
+import  prisma from "@/lib/db/prisma";
+import { auth } from "@clerk/nextjs/server";
 
 /*
     Input -> POST request with noteId and content in the body
@@ -8,6 +12,10 @@ import { getNodeByNoteId, updateContent } from "@/lib/services/note-service";
 */
 export async function POST(req: Request) {
     try {
+        const { userId } = await auth();
+        if (!userId) {
+            return new NextResponse('unauthorised', { status: 401 });
+        }
         const body = await req.json();
         let { noteId, content } = body;
         if (!noteId || !content) {
@@ -26,7 +34,26 @@ export async function POST(req: Request) {
         const note = notes[0];
 
         if (note.content !== content) {
-            await updateContent(noteId, content);
+            const embedding = await generateEmbedding(note.title + " " + content);
+            const result = await prisma.$transaction(async (tx) => {
+                const note = await tx.note.update({
+                    where: {
+                        id: noteId
+                    },
+                    data: {
+                        content: content
+                    }
+                });
+                await notesIndex.upsert([{
+                    id: noteId,
+                    values: embedding,
+                    metadata: {userId}
+                }]);
+                return note;
+            })
+            if (!result) {
+                return new NextResponse('Failed to update note', { status: 401 });
+            }
         }
         return NextResponse.json({
             success: true

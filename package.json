@@ -11,6 +11,8 @@
   "dependencies": {
     "@clerk/backend": "^1.19.1",
     "@clerk/nextjs": "^6.5.0",
+    "@huggingface/inference": "^2.8.1",
+    "@pinecone-database/pinecone": "^4.0.0",
     "@prisma/client": "^6.0.0",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-separator": "^1.1.0",

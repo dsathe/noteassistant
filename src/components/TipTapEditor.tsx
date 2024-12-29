@@ -57,7 +57,7 @@ const TipTapEditor = ({ note }: Props) => {
         },
         immediatelyRender: false
     })
-    const debouncedContent = useDebounce(content, 1000);
+    const debouncedContent = useDebounce(content, 10000);
     useEffect(() => {
         if (debouncedContent === '') return
         saveNote.mutate(undefined, {

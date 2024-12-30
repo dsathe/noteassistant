@@ -16,6 +16,8 @@ import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
+import Text from '@tiptap/extension-text';
+import { useCompletion } from 'ai/react';
 
 type Props = {
     note: any;
@@ -38,10 +40,40 @@ const TipTapEditor = ({ note }: Props) => {
         },
     });
 
+    // Make use of useCompletion to get text stream from AI model and add it to the text one by one.
+    const { complete, completion, setCompletion } = useCompletion({
+        api: "/api/completion",
+        async onResponse(response) {
+            if (response !== null && response.body != null) {
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let chunk;
+                while (!(chunk = await reader.read()).done) {
+                    const text = decoder.decode(chunk.value);
+                    setCompletion(text);
+                }
+            }
+        },
+    });
+
+    // Create a Shortcut for keyboard to call autocomplete
+    const customText = Text.extend({
+        addKeyboardShortcuts() {
+            return {
+                'Shift-a': () => {
+                    const prompt = this.editor.getText().split(' ').slice(-30).join(' ');
+                    complete(prompt);
+                    return true;
+                },
+            }
+        },
+    })
+
     const editor = useEditor({
         autofocus: true,
         extensions: [
             StarterKit,
+            customText,
             Underline,
             CodeBlockLowlight.configure({ lowlight }),
             Table.configure({
@@ -70,6 +102,11 @@ const TipTapEditor = ({ note }: Props) => {
         })
     }, [debouncedContent]);
 
+    // Adding use effect to add content to the text whenever completion variable is changed
+    React.useEffect(() => {
+        editor?.commands.insertContent(completion);
+    }, [completion]);
+
     return (
         <>
             <div className='flex flex-row justify-between'>
@@ -79,10 +116,18 @@ const TipTapEditor = ({ note }: Props) => {
                     {saveNote.isPending && <span className="animate-spin ml-1" ><LoaderPinwheel className="h-4 w-4" /></span>}
                 </Button>
             </div>
-            <div className='prose'>
+            <div className='prose prose-sm w-full mt-4'>
                 <EditorContent editor={editor} />
                 {/* Optional: Add floating/bubble menu */}
             </div>
+            <div className='h-4'></div>
+            <span className='text-sm text-gray-800'>
+                Tip: Press
+                <kbd className='px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg'>
+                    Shift + A
+                </kbd>
+                for AI autocomplete
+            </span>
         </>
 
     )

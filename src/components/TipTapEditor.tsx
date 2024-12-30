@@ -18,6 +18,7 @@ import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
 import Text from '@tiptap/extension-text';
 import { useCompletion } from 'ai/react';
+import { useToast } from "@/hooks/use-toast";
 
 type Props = {
     note: any;
@@ -31,6 +32,8 @@ const lowlight = createLowlight(common);
 const TipTapEditor = ({ note }: Props) => {
     const [content, setContent] = React.useState(note.content || 'Start typing...');
     const [savedflag, setSavedFlag] = React.useState(true);
+    const [pos, setPos] = React.useState(0);
+    const { toast } = useToast();
     const saveNote = useMutation({
         mutationFn: async () => {
             const response = await axios.post('/api/saveNote', {
@@ -55,6 +58,14 @@ const TipTapEditor = ({ note }: Props) => {
                 }
             }
         },
+        async onError(error) {
+            console.error(error);
+            toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "Failed to generate content. Please try again later.",
+            });
+        }
     });
 
     // Create a Shortcut for keyboard to call autocomplete
@@ -64,10 +75,25 @@ const TipTapEditor = ({ note }: Props) => {
             return {
                 'Shift-a': () => {
                     const prompt = this.editor.getText().split(' ').slice(-30).join(' ');
+                    const cursorposition = this.editor.state.selection.$anchor.pos;
+                    setPos(cursorposition);
                     complete(prompt);
                     return true;
                 },
                 'Control-s': () => {
+                    saveNote.mutate(undefined, {
+                        onSuccess: data => {
+                            console.log("Successfully saved note", data);
+                            setSavedFlag(true);
+                        },
+                        onError: error => {
+                            console.log("Error saving note", error);
+                            return false;
+                        }
+                    })
+                    return true;
+                },
+                'Cmd-s': () => {
                     saveNote.mutate(undefined, {
                         onSuccess: data => {
                             console.log("Successfully saved note", data);
@@ -121,7 +147,8 @@ const TipTapEditor = ({ note }: Props) => {
 
     // Adding use effect to add content to the text whenever completion variable is changed
     React.useEffect(() => {
-        editor?.commands.insertContent(completion);
+        editor?.commands.insertContentAt(pos, completion);
+        setPos(pos + completion.length);
     }, [completion]);
 
     return (
@@ -140,12 +167,26 @@ const TipTapEditor = ({ note }: Props) => {
                 {/* Optional: Add floating/bubble menu */}
             </div>
             <div className='h-4'></div>
+            <span className='text-sm text-gray-800'>Tip :-</span>
+            <br />
             <span className='text-sm text-gray-800'>
-                Tip: Press
-                <kbd className='px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg'>
+                Press
+                <kbd className='px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg ml-2 mr-2'>
                     Shift + A
                 </kbd>
                 for AI autocomplete
+            </span>
+            <br />
+            <span className='text-sm text-gray-800'>
+                Press
+                <kbd className='px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg ml-2 mr-2'>
+                    Cmd + S
+                </kbd>
+                or
+                <kbd className='px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg ml-2 mr-2'>
+                    Ctrl + S
+                </kbd>
+                for saving
             </span>
         </>
 

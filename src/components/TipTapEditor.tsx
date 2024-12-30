@@ -30,6 +30,7 @@ const lowlight = createLowlight(common);
 
 const TipTapEditor = ({ note }: Props) => {
     const [content, setContent] = React.useState(note.content || 'Start typing...');
+    const [savedflag, setSavedFlag] = React.useState(true);
     const saveNote = useMutation({
         mutationFn: async () => {
             const response = await axios.post('/api/saveNote', {
@@ -57,6 +58,7 @@ const TipTapEditor = ({ note }: Props) => {
     });
 
     // Create a Shortcut for keyboard to call autocomplete
+    // Create a Shortcut for saving the content
     const customText = Text.extend({
         addKeyboardShortcuts() {
             return {
@@ -65,6 +67,19 @@ const TipTapEditor = ({ note }: Props) => {
                     complete(prompt);
                     return true;
                 },
+                'Control-s': () => {
+                    saveNote.mutate(undefined, {
+                        onSuccess: data => {
+                            console.log("Successfully saved note", data);
+                            setSavedFlag(true);
+                        },
+                        onError: error => {
+                            console.log("Error saving note", error);
+                            return false;
+                        }
+                    })
+                    return true;
+                }
             }
         },
     })
@@ -86,15 +101,17 @@ const TipTapEditor = ({ note }: Props) => {
         content: content,
         onUpdate: ({ editor }) => {
             setContent(editor.getHTML());
+            setSavedFlag(false);
         },
         immediatelyRender: false
     })
-    const debouncedContent = useDebounce(content, 1000);
+    const debouncedContent = useDebounce(content, 60000);
     useEffect(() => {
         if (debouncedContent === '') return
         saveNote.mutate(undefined, {
             onSuccess: data => {
                 console.log("Successfully saved note", data);
+                setSavedFlag(true);
             },
             onError: error => {
                 console.log("Error saving note", error);
@@ -112,11 +129,13 @@ const TipTapEditor = ({ note }: Props) => {
             <div className='flex flex-row justify-between'>
                 {editor && <TipTapMenuBar editor={editor} />}
                 <Button disabled variant={'outline'}>
-                    {saveNote.isPending ? 'Saving Note' : 'Saved'}
+                    {!saveNote.isPending && savedflag && 'Saved'}
+                    {!savedflag && !saveNote.isPending && 'Unsaved'}
+                    {saveNote.isPending && 'Saving'}
                     {saveNote.isPending && <span className="animate-spin ml-1" ><LoaderPinwheel className="h-4 w-4" /></span>}
                 </Button>
             </div>
-            <div className='prose prose-sm w-full mt-4'>
+            <div className='prose w-full mt-4'>
                 <EditorContent editor={editor} />
                 {/* Optional: Add floating/bubble menu */}
             </div>

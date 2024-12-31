@@ -1,5 +1,5 @@
 import { HfInference } from '@huggingface/inference';
-const apiKey = process.env.HUGGINGFACE_API_KEY;
+const apiKey = process.env.HUGGINGFACE_TOKEN;
 
 if (!apiKey) {
     throw new Error('Missing Huggingface API key');
@@ -28,7 +28,7 @@ export async function generateEmbedding(text: string) {
 */
 export async function generateTextResponse(prompt: string) {
     const response = await huggingfaceClient.textGeneration({
-        model: 'google/flan-t5-large',
+        model: 'meta-llama/Llama-3.2-3B-Instruct',
         inputs: prompt
     })
     return response.generated_text;

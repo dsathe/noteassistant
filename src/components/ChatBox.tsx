@@ -8,7 +8,8 @@ import AIChatBot from './AIChatBot';
 */
 function ChatBox() {
     const [isOpen, setIsOpen] = useState(false);
-
+    const [messages, setMessages] = useState<string[]>([]);
+        
     const toggleChatBox = () => {
         setIsOpen(!isOpen);
     }
@@ -18,13 +19,13 @@ function ChatBox() {
             {!isOpen ?
                 <button
                     onClick={toggleChatBox}
-                    className='bg-green-600 text-white px-4 py-2 rounded-full flex items-center justify-center shadow-lg hover:bg-green-700 transition'
+                    className='bg-green-600 text-white px-4 py-4 rounded-full flex items-center justify-center shadow-lg hover:bg-green-700 transition'
                     aria-label='Open Chat Bot'
                 >
                     <MessageCircleMore className='h-5 w-5' />
                 </button>
                 :
-                <AIChatBot open={isOpen} onClose={toggleChatBox} />
+                <AIChatBot open={isOpen} onClose={toggleChatBox} messages={messages} setMessages={setMessages}/>
             }
         </div>
     )

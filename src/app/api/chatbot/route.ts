@@ -36,16 +36,28 @@ export async function POST(req: Request) {
         if (!notes) {
             return new NextResponse('Note not found', { status: 401 });
         }
-        console.log(notes); 
-        const noteContentWithoutTags = notes.map((note) => note.content?.replace(/<[^>]*>/g, ' ')).join('\n');
-        const relevantNotes = noteContentWithoutTags;
-        console.log(relevantNotes);
-        const prompt = `You're a chatbot that answers questions based on the conversation so far:\n${previousMessages.join('\n')}\n\nContext:\n${relevantNotes}\n\nQuestion:\n${message}\n\nAnswer (keep the answer within the context and in a simple sentence and less than 30 words):`;
+        const relevantNotes = notes.map((note) => `Title: ${note.title}\nContent: ${note.content?.replace(/<[^>]*>/g, ' ')}`).join('\n');
+
+        const prompt = 
+        'You are a part of an AI powered note-taking application where users can create notes with content. Your task is to answer questions ONLY on the basics of the conversation so far and relevant notes I have found.\n\n' +
+        "The relevant notes for this question are:\n\n" +
+        `${relevantNotes}\n\n` +
+        "The conversation you have had so far is (use this to gain context to answer the question):\n\n" +
+        `${previousMessages.join('\n')}\n\n` +
+        "The question is:\n\n" +
+        `${message}\n\n` +
+        "Please keep the tone consistent with the rest of the text and keep the response within 20 words and with complete sentences. If you cannot answer the question, please say 'I'm sorry, I don't know.'\n\n" +
+        "DO NOT REPEAT WITH THIS PROMPT, just give the answer:\n\n" +
+        "Your answer:";
         
         const response = await generateTextResponse(prompt);
-
+        let yourAnswerIndex = response.indexOf('Your answer:');
+        let generatedAnswer = response;
+        if (yourAnswerIndex !== -1) {
+            generatedAnswer = response.slice(yourAnswerIndex + 12, response.length);
+        }
         return NextResponse.json({ 
-            reply: response
+            reply: generatedAnswer
         }, { status: 200 });
     }
     catch (error) {

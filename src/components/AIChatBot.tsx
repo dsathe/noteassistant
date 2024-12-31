@@ -13,10 +13,11 @@ import { cn } from '@/lib/utils';
 interface AIChatBotProps {
     open: boolean;
     onClose: () => void;
+    messages: string[];
+    setMessages: (messages: string[]) => void;
 }
 
-function AIChatBot({ open, onClose }: AIChatBotProps) {
-    const [messages, setMessages] = useState<string[]>([]);
+function AIChatBot({ open, onClose, messages, setMessages }: AIChatBotProps) {
     const [inputMessage, setInputMessage] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -141,7 +142,7 @@ function ChatMessage({
             >
                 {content}
             </p>
-            {!isAiMessage && user?.imageUrl ? (
+            {!isAiMessage && user?.imageUrl && (
                 <Image
                     src={user.imageUrl}
                     alt="User"
@@ -149,8 +150,7 @@ function ChatMessage({
                     width={24}
                     height={24}
                 />
-            ) :
-                <User className="ml-2 shrink-0" />
+            ) 
             }
 
         </div>

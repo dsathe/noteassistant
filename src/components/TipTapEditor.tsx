@@ -52,9 +52,17 @@ const TipTapEditor = ({ note }: Props) => {
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
                 let chunk;
-                while (!(chunk = await reader.read()).done) {
-                    const text = decoder.decode(chunk.value);
-                    setCompletion(text);
+                try {
+                    while (!(chunk = await reader.read()).done) {
+                        const text = decoder.decode(chunk.value);
+                        setCompletion(text);
+                    }
+                }
+                catch (error) {
+                    console.error("Error while streaming " + error);
+                }
+                finally {
+                    reader.releaseLock();
                 }
             }
         },

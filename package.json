@@ -30,6 +30,7 @@
     "@tiptap/react": "^2.10.3",
     "@tiptap/starter-kit": "^2.10.3",
     "@uploadthing/react": "^7.1.2",
+    "ai": "^4.0.22",
     "axios": "^1.7.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

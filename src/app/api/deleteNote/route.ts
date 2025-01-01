@@ -1,5 +1,6 @@
-import { deleteNote } from "@/lib/services/note-service";
+import { notesIndex } from "@/lib/db/pinecone";
 import { NextResponse } from "next/server";
+import prisma from "@/lib/db/prisma";
 
 /*
     Input -> POST request with noteId in the body
@@ -12,7 +13,16 @@ export async function POST(req: Request) {
         if (!noteId) {
             return NextResponse.json('Missing noteId', { status: 400 });
         }
-        await deleteNote(noteId);
+        await prisma.$transaction( async (tx) => {
+            await tx.note.delete({
+                where: {
+                    id: noteId
+                }
+            });
+
+            await notesIndex.deleteOne(noteId);
+        })
+
         return NextResponse.json({
             success: true
         }, { status: 200 });

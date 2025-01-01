@@ -12,6 +12,7 @@ import { Note } from '@prisma/client';
 import NoteCard from '@/components/NoteCard';
 import { getAllNotesOfUser } from '@/lib/services/note-service';
 import { redirect } from 'next/navigation';
+import ChatBox from '@/components/ChatBox';
 
 type Props = {}
 
@@ -71,6 +72,7 @@ const DashboardPage = async (props: Props) => {
                         }
                     </div>
                 </div>
+                <ChatBox/>
             </div>
         </>
     )

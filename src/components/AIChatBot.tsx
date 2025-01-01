@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 import { useUser } from '@clerk/nextjs';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { Textarea } from './ui/textarea';
 
 /*
     Description -> AI chatbot component that handles the conversation between the user and the AI chatbot.
@@ -22,7 +23,7 @@ function AIChatBot({ open, onClose, messages, setMessages }: AIChatBotProps) {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -36,6 +37,18 @@ function AIChatBot({ open, onClose, messages, setMessages }: AIChatBotProps) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messages]);
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            if (e.shiftKey) {
+                return;
+
+            } else {
+                
+                handleSendMessage();
+            }
+        }
+    }
 
     const handleSendMessage = async () => {
         if (!inputMessage.trim()) return;
@@ -93,7 +106,7 @@ function AIChatBot({ open, onClose, messages, setMessages }: AIChatBotProps) {
                 }
                 {error && <ChatMessage message={`Assistant: ${error}`} />}
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-2 mt-4">
                 <Button
                     onClick={() => setMessages([])}
                     title='Clear Chat'
@@ -104,13 +117,18 @@ function AIChatBot({ open, onClose, messages, setMessages }: AIChatBotProps) {
                 >
                     <Trash2 />
                 </Button>
-                <Input
+                <Textarea
                     value={inputMessage}
                     onChange={e => setInputMessage(e.target.value)}
                     placeholder="Type your message..."
                     ref={inputRef}
+                    onKeyDown={handleKeyDown}
+                    disabled={loading}
+                    className={cn(
+                        'min-h-[30px] h-10',
+                    )}
                 />
-                <Button type='button' onClick={handleSendMessage}>Send</Button>
+                <Button type='button' onClick={handleSendMessage} disabled={loading}>Send</Button>
             </div>
 
         </div>
@@ -140,7 +158,7 @@ function ChatMessage({
                     isAiMessage ? "bg-background" : "bg-primary text-primary-foreground",
                 )}
             >
-                {content}
+                {content.trim()}
             </p>
             {!isAiMessage && user?.imageUrl && (
                 <Image
@@ -150,7 +168,7 @@ function ChatMessage({
                     width={24}
                     height={24}
                 />
-            ) 
+            )
             }
 
         </div>

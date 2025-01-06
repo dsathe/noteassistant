@@ -2,7 +2,6 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { generateEmbedding, generateTextResponse } from "@/lib/huggingface";
 import { notesIndex } from "@/lib/db/pinecone";
-import prisma from "@/lib/db/prisma";
 import { getNotesByIds } from "@/lib/services/note-service";
 
 /*

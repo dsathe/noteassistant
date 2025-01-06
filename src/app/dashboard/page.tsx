@@ -11,6 +11,7 @@ import { getAllNotesOfUser } from '@/lib/services/note-service';
 import { redirect } from 'next/navigation';
 import ChatBox from '@/components/ChatBox';
 import DisplayNotes from '@/components/DisplayNotes';
+import NavbarComponents from '@/components/NavbarComponents';
 
 type Props = {}
 
@@ -31,20 +32,7 @@ const DashboardPage = async (props: Props) => {
         <>
             <div className="grainy min-h-screen">
                 <div className="max-w-7xl mx-auto p-10">
-                    <div className="mt-10 flex justify-between items-center md:flex-row flex-col">
-                        <div className="flex items-center justify-between w-full">
-                            <Link href='/'>
-                                <Button className="bg-green-600 font-semibold" size="sm">
-                                    <ArrowLeft className="mr-2 h-4 w-4" strokeWidth={3} />
-                                    Back
-                                </Button>
-                            </Link>
-                            <h1 className="mx-auto text-3xl font-bold text-gray-900">My Notes</h1>
-                            <div>
-                                <UserButton />
-                            </div>
-                        </div>
-                    </div>
+                    <NavbarComponents />
                     <div className="mt-8 mb-8">
                         <Separator />
                     </div>

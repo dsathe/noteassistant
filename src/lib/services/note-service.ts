@@ -117,3 +117,19 @@ export async function getNotesByIds(noteIds: string[]) {
         }
     })
 }
+
+/*
+    Description -> Toggle favorite of a note
+    Input -> noteId, isFavorited
+    Output -> None
+*/
+export async function toggleFavorite(noteId: string, isFavorited: boolean) {
+    return await prisma.note.update({
+        where: {
+            id: noteId
+        },
+        data: {
+            isFavorited: !isFavorited
+        }
+    })
+}

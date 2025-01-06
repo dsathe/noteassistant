@@ -6,13 +6,11 @@ import { UserButton } from '@clerk/nextjs';
 import { Separator } from '@/components/ui/separator';
 import CreateNoteDialog from '@/components/CreateNoteDialog';
 import { auth } from '@clerk/nextjs/server';
-
-
 import { Note } from '@prisma/client';
-import NoteCard from '@/components/NoteCard';
 import { getAllNotesOfUser } from '@/lib/services/note-service';
 import { redirect } from 'next/navigation';
 import ChatBox from '@/components/ChatBox';
+import DisplayNotes from '@/components/DisplayNotes';
 
 type Props = {}
 
@@ -51,28 +49,9 @@ const DashboardPage = async (props: Props) => {
                         <Separator />
                     </div>
                     <CreateNoteDialog />
-                    
-                    {notes.length === 0 && (
-                        <div className="text-center">
-                            <h2 className='text-xl text-gray-500 mt-5'>No notes yet.</h2>
-                        </div>
-                    )}
-
-                    {/* display all notes */}
-                    <br />
-                    <div className='h-1 p-4'>
-                    </div>
-                    <div className='columns-1 sm:columns-3 md:columns-5 col-gap-3 row-gap-3'>
-                        {
-                            notes.map(note => {
-                                return (
-                                    <NoteCard note={note} key={note.id} />
-                                )
-                            })
-                        }
-                    </div>
+                    <DisplayNotes initialNotes={notes} />
                 </div>
-                <ChatBox/>
+                <ChatBox />
             </div>
         </>
     )

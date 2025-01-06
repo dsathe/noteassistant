@@ -8,6 +8,8 @@ import CoverImageModal from '@/components/CoverImageModal';
 import { useToast } from "@/hooks/use-toast";
 import Link from 'next/link';
 import DeleteButton from '@/components/DeleteButton';
+import FavoritesButton from '@/components/FavoritesButton';
+
 type Props = {
     note: any;
     userName: string;
@@ -41,7 +43,7 @@ const EditorClient = ({ note, userName }: Props) => {
                 throw new Error(result.error || 'Failed to update cover image.');
             }
             setShowCoverModal(false);
-            
+
             toast({
                 variant: "success",
                 description: "Cover image updated successfully.",
@@ -62,7 +64,7 @@ const EditorClient = ({ note, userName }: Props) => {
                     src={coverImage || 'https://dummyimage.com/1200x400/ffffff/fff.png'}
                     alt="Cover"
                     className="w-full h-full object-center object-cover"
-                    
+
                 />
                 <button
                     onClick={toggleModal}
@@ -87,6 +89,9 @@ const EditorClient = ({ note, userName }: Props) => {
                             <span className='text-stone-500 font-semibold'>{note.title}</span>
                         </div>
                         <div className='ml-auto'>
+                            <FavoritesButton noteId={note.id} initialIsFavorited={note.isFavorited}/>
+                        </div>
+                        <div className='ml-5'>
                             <DeleteButton noteId={note.id} />
                         </div>
                     </div>

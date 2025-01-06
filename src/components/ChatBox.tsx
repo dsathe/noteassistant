@@ -1,5 +1,5 @@
 'use client'
-import { MessageCircleMore, X } from 'lucide-react';
+import { MessageCircleMore } from 'lucide-react';
 import React, { useState } from 'react'
 import AIChatBot from './AIChatBot';
 
@@ -21,6 +21,7 @@ function ChatBox() {
                     onClick={toggleChatBox}
                     className='bg-green-600 text-white px-4 py-4 rounded-full flex items-center justify-center shadow-lg hover:bg-green-700 transition'
                     aria-label='Open Chat Bot'
+                    title='Open Chat Bot'
                 >
                     <MessageCircleMore className='h-5 w-5' />
                 </button>

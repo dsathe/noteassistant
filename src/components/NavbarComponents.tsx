@@ -11,21 +11,32 @@ type Props = {}
 const NavbarComponents = (props: Props) => {
 
     return (
-        <div className="mt-10 flex justify-between items-center md:flex-row flex-col">
-            <div className="flex items-center justify-between w-full">
-                <Link href='/'>
-                    <Button className="bg-green-600 font-semibold" size="sm">
-                        <ArrowLeft className="mr-2 h-4 w-4" strokeWidth={3} />
-                        Back
-                    </Button>
-                </Link>
-                <h1 className="mx-auto text-3xl font-bold text-gray-900 ml-500">My Notes</h1>
-                <SearchBar />
-                <div>
-                    <UserButton />
+        <>
+            <div className="hidden md:block">
+                <div className="mt-10 flex justify-between items-center md:flex-row flex-col">
+                    <div className="flex items-center justify-between w-full">
+                        <h1 className="mr-auto text-3xl font-bold text-gray-900 ml-[50px]">My Notes</h1>
+                        <SearchBar />
+                        <div>
+                            <UserButton />
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div className="block md:hidden">
+                <div className="mt-10 flex justify-between items-center md:flex-row flex-col">
+                    <div className="flex items-center justify-between w-full">
+                        <h1 className="mr-auto text-3xl font-bold text-gray-900 ml-[20px]">My Notes</h1>
+                        <div className='mr-[20px]'>
+                            <UserButton />
+                        </div>
+                    </div>
+                    <br />
+                    <SearchBar />
+                </div>
+            </div>
+        </>
+
     )
 }
 

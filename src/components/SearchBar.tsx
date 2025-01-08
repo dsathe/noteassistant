@@ -26,8 +26,8 @@ const SearchBar = (props: Props) => {
     }
 
     return (
-        <div className='flex items-center w-fit mx-[50px]'>
-            <input type='text' placeholder='Find a note ...' className='w-[75px] sm:w-[75px] md:w-[150px] lg:w-[350px] focus:outline-none h-[25px] bg-inherit placeholder-gray-500 border-bottom border-gray-800 border-b-2 border-black' value={svalue} onChange={(e) => {
+        <div className='flex items-center w-fit md:mx-[50px]'>
+            <input type='text' placeholder='Find a note ...' className='w-[220px] sm:w-[220px] md:w-[3x50px] lg:w-[350px] focus:outline-none h-[25px] bg-inherit placeholder-gray-500 border-bottom border-gray-800 border-b-2 border-black' value={svalue} onChange={(e) => {
                 setSvalue(e.target.value);
             }}
                 onKeyDown={handleKeyDown}

@@ -35,6 +35,21 @@ export async function generateTextResponse(prompt: string) {
 }
 
 /*
+    Description -> Generate image response from prompt
+    Input -> prompt
+    Output -> image response
+*/
+
+export async function generateImageResponse(prompt: string) {
+    const response = await huggingfaceClient.textToImage({
+        model: 'black-forest-labs/FLUX.1-schnell',
+        inputs: prompt
+    })
+    const arrayBuffer = await response.arrayBuffer();
+    const base64String = Buffer.from(arrayBuffer).toString('base64');
+
+    return base64String;
+}/*
     Input -> Text Completion prompt
     Output -> Send a request to ml transformer model to perform autocompletion task
     Description -> Creating a data stream for autocomplete and sending it one by one

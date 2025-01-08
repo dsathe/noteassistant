@@ -9,14 +9,22 @@ export const COVER_IMAGE_PRESETS = [
   "https://fastly.picsum.photos/id/936/1200/400.jpg?hmac=X5VY92jIt1AII_R9Ejazlb7WSzoIWTtl9b_1RGIwuw8",
 ]
 
+interface ImageGenerationResponse {
+  image: string;
+  success: boolean;
+  error?: string;
+}
+
 type Props = {
   onClose: () => void;
   onImageSelect: (image: string) => void;
 }
 
 const CoverImageModal = ({ onClose, onImageSelect }: Props) => {
-  const [uploadMethod, setUploadMethod] = useState<'preset' | 'url' | 'file'>('preset');
+  const [uploadMethod, setUploadMethod] = useState<'preset' | 'url' | 'file' | 'ai'>('preset');
   const [imageUrl, setImageUrl] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handlePresetImageSelect = (image: string) => {
     onImageSelect(image);
@@ -24,12 +32,43 @@ const CoverImageModal = ({ onClose, onImageSelect }: Props) => {
   };
 
   const handleUrlImageSelect = () => {
-    if (!imageUrl){
+    if (!imageUrl) {
       alert('Please enter an image URL');
       return
-    } 
+    }
     onImageSelect(imageUrl);
     onClose();
+  }
+
+  const handleAIImageGeneration = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/imageGeneration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imageDescription: imageUrl,
+        }),
+      });
+      const data: ImageGenerationResponse = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to generate image');
+      }
+
+      onImageSelect(data.image);
+      setImageUrl('');
+      onClose();
+    }
+    catch (error) {
+      console.error(error);
+      setError('Failed to get reply. Please try again.');
+    }
+    finally {
+      setLoading(false);
+    }
   }
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -77,8 +116,16 @@ const CoverImageModal = ({ onClose, onImageSelect }: Props) => {
             >
               File
             </button>
+            <button
+              onClick={() => setUploadMethod('ai')}
+              className={`px-6 py-2 rounded-t-md ${uploadMethod === 'ai'
+                ? 'bg-green-500 text-white border-b-2 border-green-700'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+            >
+              AI
+            </button>
           </div>
-
         </div>
 
         {uploadMethod === 'preset' && (
@@ -147,6 +194,37 @@ const CoverImageModal = ({ onClose, onImageSelect }: Props) => {
             <p className="text-sm mt-2">
               Please ensure the image is in 1200x400 format
             </p>
+          </div>
+        )}
+
+        {uploadMethod === 'ai' && (
+          <div className="flex flex-col space-y-4 justify-center items-start">
+
+            <label
+              htmlFor="url"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Enter a brief description of the image that you want to generate:
+            </label>
+            <div className="flex flex-row space-x-2 w-full">
+              <input
+                type="text"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                placeholder="Enter a brief description for a 1200x400 image"
+                className="flex-grow border rounded-lg px-3 py-2"
+                disabled={loading}
+              />
+              <button
+                onClick={handleAIImageGeneration}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                disabled={loading}
+              >
+                Generate
+              </button>
+            </div>
+            {loading && <p>Generating image. Please wait a moment. This may take a few minutes...</p>}
+            {!loading && error && <p>An error occurred. Please try again later.</p>}
           </div>
         )}
       </div>

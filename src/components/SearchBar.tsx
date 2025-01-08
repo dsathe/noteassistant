@@ -32,6 +32,14 @@ const SearchBar = (props: Props) => {
             }}
                 onKeyDown={handleKeyDown}
             ></input>
+            {searchstring.searchvalue != "" && <ClearIcon className='w-10px transition hover:-translate-y-1 inline-block ml-1 relative sm:-top-1 md:-top-0' onClick={() => {
+                var newsearchstring = {
+                    searchvalue: "",
+                    searchresshow: false
+                };
+                update(newsearchstring);
+                setSvalue("");
+            }}></ClearIcon>}
             <SearchIcon className='w-10px transition hover:-translate-y-1 inline-block ml-1' onClick={() => {
                 console.log("Search query title is " + svalue);
                 var newsearchstring = {
@@ -40,14 +48,6 @@ const SearchBar = (props: Props) => {
                 };
                 update(newsearchstring);
             }} />
-            {searchstring.searchvalue != "" && <ClearIcon className='w-10px transition hover:-translate-y-1 inline-block ml-1' onClick={() => {
-                var newsearchstring = {
-                    searchvalue: "",
-                    searchresshow: false
-                };
-                update(newsearchstring);
-                setSvalue("");
-            }}></ClearIcon>}
         </div>
     )
 }

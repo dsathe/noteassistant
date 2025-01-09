@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/db/prisma";
-import { getNodeByNoteId, toggleFavorite } from "@/lib/services/note-service";
+import { toggleFavorite } from "@/lib/services/note-service";
 
 /*
     Input -> POST request with noteId in the body
-    Output -> Send a prisma request to delete a note entry in the database
-    Description -> Creating deleteNote endpoint to delete a note in the mongodb database
+    Output -> Send a prisma request to toggle isFavorited of note in the database
+    Description -> Toggling isFavorited of note in the database
 */
 export async function POST(req: Request) {
     try {

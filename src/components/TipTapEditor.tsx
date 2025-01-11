@@ -91,11 +91,9 @@ const TipTapEditor = ({ note }: Props) => {
                 'Control-s': () => {
                     saveNote.mutate(undefined, {
                         onSuccess: data => {
-                            console.log("Successfully saved note", data);
                             setSavedFlag(true);
                         },
                         onError: error => {
-                            console.log("Error saving note", error);
                             return false;
                         }
                     })
@@ -104,11 +102,9 @@ const TipTapEditor = ({ note }: Props) => {
                 'Cmd-s': () => {
                     saveNote.mutate(undefined, {
                         onSuccess: data => {
-                            console.log("Successfully saved note", data);
                             setSavedFlag(true);
                         },
                         onError: error => {
-                            console.log("Error saving note", error);
                             return false;
                         }
                     })
@@ -139,16 +135,14 @@ const TipTapEditor = ({ note }: Props) => {
         },
         immediatelyRender: false
     })
-    const debouncedContent = useDebounce(content, 60000);
+    const debouncedContent = useDebounce(content, 30000);
     useEffect(() => {
         if (debouncedContent === '') return
         saveNote.mutate(undefined, {
             onSuccess: data => {
-                console.log("Successfully saved note", data);
                 setSavedFlag(true);
             },
             onError: error => {
-                console.log("Error saving note", error);
             }
         })
     }, [debouncedContent]);
@@ -161,9 +155,9 @@ const TipTapEditor = ({ note }: Props) => {
 
     return (
         <>
-            <div className='flex flex-row justify-between'>
+            <div className='flex flex-col sm:flex-row gap-6 sm:gap-0 sm:justify-between'>
                 {editor && <TipTapMenuBar editor={editor} />}
-                <Button disabled variant={'outline'}>
+                <Button disabled variant={'outline'} className={`${!savedflag ? !saveNote.isPending ? 'bg-red-500 text-white': '' : 'bg-green-500 text-white'}`}>
                     {!saveNote.isPending && savedflag && 'Saved'}
                     {!savedflag && !saveNote.isPending && 'Unsaved'}
                     {saveNote.isPending && 'Saving'}

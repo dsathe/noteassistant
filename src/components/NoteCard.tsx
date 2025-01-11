@@ -36,8 +36,10 @@ const NoteCard = ({ note, onToggleFavorite }: Props) => {
                         year: 'numeric',
                     })}
                 </p>
-                <FavoritesButton noteId={note.id} initialIsFavorited={note.isFavorited} onToggleFavorite={onToggleFavorite} />
-                <DeleteButton noteId={note.id} />
+                <div className='flex flex-row gap-2'>
+                    <FavoritesButton noteId={note.id} initialIsFavorited={note.isFavorited} onToggleFavorite={onToggleFavorite} />
+                    <DeleteButton noteId={note.id} />
+                </div>
             </div>
         </div>
     )

@@ -26,13 +26,15 @@ const NavbarComponents = (props: Props) => {
             <div className="block md:hidden">
                 <div className="mt-10 flex justify-between items-center md:flex-row flex-col">
                     <div className="flex items-center justify-between w-full">
-                        <h1 className="mr-auto text-3xl font-bold text-gray-900 ml-[20px]">My Notes</h1>
-                        <div className='mr-[20px]'>
+                        <h1 className="mr-auto text-3xl font-bold text-gray-900 ml-[15px]">My Notes</h1>
+                        <div className='h-full mt-[5px] mr-[20px]'>
                             <UserButton />
                         </div>
                     </div>
                     <br />
-                    <SearchBar />
+                    <div className='mt-10'>
+                        <SearchBar />
+                    </div>
                 </div>
             </div>
         </>

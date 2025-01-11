@@ -41,7 +41,6 @@ const SearchBar = (props: Props) => {
                 setSvalue("");
             }}></ClearIcon>}
             <SearchIcon className='w-10px transition hover:-translate-y-1 inline-block ml-1' onClick={() => {
-                console.log("Search query title is " + svalue);
                 var newsearchstring = {
                     searchvalue: svalue,
                     searchresshow: true

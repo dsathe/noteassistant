@@ -43,7 +43,6 @@ const CreateNoteDialog = (props: Props) => {
         }
         createNotebook.mutate(undefined, {
             onSuccess: ({ note }) => {
-                console.log("Successfully created a note");
                 router.push(`/notebook/${note.id}`);
                 toast({
                     variant: "success",
@@ -76,7 +75,7 @@ const CreateNoteDialog = (props: Props) => {
                     <h2 className='font-semibold text-green-600 sm:mt-2'>New Note</h2>
                 </div>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="w-[calc(100%-2rem)] sm:w-full left-[50%] translate-x-[-50%] rounded-lg">
                 <DialogHeader>
                     <DialogTitle>New Note</DialogTitle>
                     <DialogDescription>

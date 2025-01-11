@@ -15,7 +15,7 @@ function ChatBox() {
     }
 
     return (
-        <div className='fixed bottom-5 right-5 z-50 p-1'>
+        <div className='fixed bottom-5 right-0 md:right-5 z-50 p-1'>
             {!isOpen ?
                 <button
                     onClick={toggleChatBox}

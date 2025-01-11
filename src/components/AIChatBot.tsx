@@ -83,7 +83,7 @@ function AIChatBot({ open, onClose, messages, setMessages }: AIChatBotProps) {
         }
     }
     return (
-        <div className='mt-2 w-[400px] h-[500px] bg-white shadow-lg border border-gray-200 p-4 flex flex-col'>
+        <div className='mt-2 w-full md:w-[400px] h-[500px] bg-white shadow-lg border border-gray-200 p-4 flex flex-col'>
             <div className="flex justify-between items-center mb-2  ">
                 <h3 className="text-lg font-semibold">Chat Assistant</h3>
                 <button

@@ -65,7 +65,7 @@ const DisplayNotes = ({ initialNotes }: Props) => {
                 <br />
                 <div className='h-1 p-4'>
                 </div>
-                <div className='columns-1 sm:columns-3 md:columns-5 col-gap-3 row-gap-3'>
+                <div className='columns-1 sm:columns-2 md:columns-3 xl:columns-5 col-gap-3 row-gap-3'>
                     {
                         sortedNotes.map(note => {
                             return (

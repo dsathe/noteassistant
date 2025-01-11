@@ -68,7 +68,7 @@ const EditorClient = ({ note, userName }: Props) => {
                 />
                 <button
                     onClick={toggleModal}
-                    className="fixed bottom-4 right-4 z-20 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white transition"
+                    className="fixed top-4 xl:top-auto xl:bottom-4 right-4 z-20 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white transition"
                 >
                     <Pencil size={24} strokeWidth={1.5} />
                 </button>
@@ -76,22 +76,29 @@ const EditorClient = ({ note, userName }: Props) => {
 
             <div className="grainy min-h-screen p-8 pt-64">
                 <div className="max-w-4xl mx-auto">
-                    <div className='flex flex-row items-center bg-stone-50 border shadow-xl border-stone-200 rounded-lg p-4 relative z-10'>
-                        <Link href="/dashboard">
-                            <Button className="bg-green-600" size='sm'>
-                                <ArrowLeft className="mr-2 h-4 w-4" strokeWidth={3} />
-                                Back
-                            </Button>
-                        </Link>
-                        <div className='ml-6'>
-                            <span className='font-semibold'>{userName}</span>
-                            <span className='inline-block mx-1'>/</span>
-                            <span className='text-stone-500 font-semibold'>{note.title}</span>
+                    <div className="flex flex-col md:flex-row items-center bg-stone-50 border shadow-xl border-stone-200 rounded-lg p-4 relative z-10">
+                        <div className="w-full text-center md:text-left md:ml-6 mb-4 md:mb-0 md:order-2">
+                            <span className="font-semibold">{userName}</span>
+                            <span className="inline-block mx-1">/</span>
+                            <span className="text-stone-500 font-semibold">{note.title}</span>
                         </div>
-                        <div className='ml-auto'>
-                            <FavoritesButton noteId={note.id} initialIsFavorited={note.isFavorited}/>
+
+                        <div className="w-full md:w-auto flex flex-row justify-between items-center gap-4 md:order-1 md:justify-start">
+                            <Link href="/dashboard">
+                                <Button className="bg-green-600" size="sm">
+                                    <ArrowLeft className="mr-2 h-4 w-4" strokeWidth={3} />
+                                    Back
+                                </Button>
+                            </Link>
+
+                            <div className="flex flex-row gap-4 ml-auto md:ml-5 md:hidden">
+                                <FavoritesButton noteId={note.id} initialIsFavorited={note.isFavorited} />
+                                <DeleteButton noteId={note.id} />
+                            </div>
                         </div>
-                        <div className='ml-5'>
+
+                        <div className="w-full hidden md:flex md:w-auto justify-end gap-4 mt-4 md:mt-0 md:order-3">
+                            <FavoritesButton noteId={note.id} initialIsFavorited={note.isFavorited} />
                             <DeleteButton noteId={note.id} />
                         </div>
                     </div>
